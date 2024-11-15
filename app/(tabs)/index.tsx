@@ -281,10 +281,10 @@ const styles = StyleSheet.create({
     lottieContainer: {
         alignItems: 'center',
         marginVertical: brandTheme.shape.spacing * 2,
-        height: 60,
+        height: 120,
     },
     lottieAnimation: {
-        width: 60,
-        height: 60,
+        width: 120,
+        height: 120,
     },
 });
