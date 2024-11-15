@@ -1,4 +1,4 @@
-import { brandColors } from '@/app/theme';
+import { brandColors } from '@/src/theme';
 
 // Export brand colors for backward compatibility
 export const Colors = {

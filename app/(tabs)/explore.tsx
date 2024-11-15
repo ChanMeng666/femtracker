@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useUsageRecords } from '@/hooks/useUsageRecords';
 import { ProductNames } from '@/constants';
-import { brandTheme } from '../theme';
+import { brandTheme } from '@/src/theme';
 
 export default function ExploreScreen() {
     const { records } = useUsageRecords();

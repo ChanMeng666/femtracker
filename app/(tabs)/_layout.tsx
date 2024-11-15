@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { brandTheme } from '../theme';
+import { brandTheme } from '@/src/theme';
 
 export default function TabLayout() {
     const { brandColors } = brandTheme;

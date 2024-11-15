@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import { Card, Text, Portal, Dialog, Surface } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useUsageRecords } from '@/hooks/useUsageRecords';
 import { ProductType, ProductNames, USAGE_HOURS } from '@/constants';
-import { brandTheme } from '../theme';
+import { brandTheme } from '@/src/theme';
 import { BrandButton } from '@/components/BrandButton';
 import {storageService} from "@/services/storage";
+import LottieView from 'lottie-react-native';
 
 export default function RecordScreen() {
     const { activeProduct, addRecord, markRemoved } = useUsageRecords();
@@ -86,7 +87,10 @@ export default function RecordScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollViewContent}
+        >
             {activeProduct ? (
                 <Card style={styles.statusCard}>
                     <LinearGradient
@@ -109,6 +113,16 @@ export default function RecordScreen() {
                                 <Text variant="headlineSmall" style={styles.productName}>
                                     {ProductNames[activeProduct.productType]}
                                 </Text>
+                            </View>
+
+                            {/* 添加 Lottie 动画 */}
+                            <View style={styles.lottieContainer}>
+                                <LottieView
+                                    source={require('@/assets/Lottie/blood.json')}
+                                    autoPlay
+                                    loop
+                                    style={styles.lottieAnimation}
+                                />
                             </View>
 
                             <View style={styles.timeInfo}>
@@ -190,11 +204,19 @@ export default function RecordScreen() {
                     </Dialog.Actions>
                 </Dialog>
             </Portal>
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollView: {
+        backgroundColor: brandTheme.brandColors.background.default,
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        padding: brandTheme.shape.spacing * 2,
+        paddingBottom: brandTheme.shape.spacing * 4,
+    },
     container: {
         ...brandTheme.globalStyles.container,
     },
@@ -255,5 +277,14 @@ const styles = StyleSheet.create({
     },
     dialog: {
         backgroundColor: brandTheme.brandColors.background.paper,
+    },
+    lottieContainer: {
+        alignItems: 'center',
+        marginVertical: brandTheme.shape.spacing * 2,
+        height: 60,
+    },
+    lottieAnimation: {
+        width: 60,
+        height: 60,
     },
 });

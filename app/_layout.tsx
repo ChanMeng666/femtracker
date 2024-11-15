@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import { Slot } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { brandTheme } from './theme';
+import { brandTheme } from '@/src/theme';
 
 // Decorative background pattern component inspired by the logo
 const BackgroundPattern: React.FC = () => {
