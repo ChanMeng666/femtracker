@@ -2,9 +2,10 @@ import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Card, Text, Divider } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useUsageRecords } from '@/hooks/useUsageRecords';
 import { ProductNames } from '@/constants';
-import Colors from '../../constants/Colors';
+import { brandTheme } from '../theme';
 
 export default function ExploreScreen() {
     const { records } = useUsageRecords();
@@ -36,7 +37,6 @@ export default function ExploreScreen() {
         });
     };
 
-    // 按日期分组记录
     const groupedRecords = records.reduce((groups: Record<string, typeof records>, record) => {
         const date = formatDate(record.insertedAt);
         if (!groups[date]) {
@@ -53,36 +53,41 @@ export default function ExploreScreen() {
                     <Text variant="titleMedium" style={styles.dateHeader}>
                         {date}
                     </Text>
-                    {dateRecords.reverse().map((record, index) => (
+                    {dateRecords.reverse().map((record) => (
                         <Card key={record.id} style={styles.recordCard}>
-                            <Card.Content>
-                                <View style={styles.recordHeader}>
-                                    <View style={styles.productInfo}>
-                                        <MaterialCommunityIcons
-                                            name={record.productType === 'tampon' ? 'bandage' : 'cup'}
-                                            size={24}
-                                            color={Colors.primary.main}
-                                        />
-                                        <Text variant="titleMedium" style={styles.productName}>
-                                            {ProductNames[record.productType]}
+                            <LinearGradient
+                                colors={[brandTheme.brandColors.background.paper, brandTheme.brandColors.background.elevated]}
+                                style={styles.cardGradient}
+                            >
+                                <Card.Content>
+                                    <View style={styles.recordHeader}>
+                                        <View style={styles.productInfo}>
+                                            <MaterialCommunityIcons
+                                                name={record.productType === 'tampon' ? 'bandage' : 'cup'}
+                                                size={24}
+                                                color={brandTheme.brandColors.primary.main}
+                                            />
+                                            <Text variant="titleMedium" style={styles.productName}>
+                                                {ProductNames[record.productType]}
+                                            </Text>
+                                        </View>
+                                        <Text variant="bodyMedium" style={styles.duration}>
+                                            {formatDuration(record.insertedAt, record.removedAt)}
                                         </Text>
                                     </View>
-                                    <Text variant="bodyMedium" style={styles.duration}>
-                                        {formatDuration(record.insertedAt, record.removedAt)}
-                                    </Text>
-                                </View>
-                                <Divider style={styles.divider} />
-                                <View style={styles.timeInfo}>
-                                    <Text variant="bodyMedium">
-                                        放入时间: {formatTime(record.insertedAt)}
-                                    </Text>
-                                    {record.removedAt && (
-                                        <Text variant="bodyMedium">
-                                            取出时间: {formatTime(record.removedAt)}
+                                    <Divider style={styles.divider} />
+                                    <View style={styles.timeInfo}>
+                                        <Text variant="bodyMedium" style={styles.timeText}>
+                                            放入时间: {formatTime(record.insertedAt)}
                                         </Text>
-                                    )}
-                                </View>
-                            </Card.Content>
+                                        {record.removedAt && (
+                                            <Text variant="bodyMedium" style={styles.timeText}>
+                                                取出时间: {formatTime(record.removedAt)}
+                                            </Text>
+                                        )}
+                                    </View>
+                                </Card.Content>
+                            </LinearGradient>
                         </Card>
                     ))}
                 </View>
@@ -93,38 +98,50 @@ export default function ExploreScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: Colors.background.default,
+        ...brandTheme.globalStyles.container,
     },
     dateHeader: {
-        marginVertical: 8,
-        color: Colors.text.secondary,
+        marginVertical: brandTheme.shape.spacing,
+        color: brandTheme.brandColors.text.secondary,
+        ...brandTheme.typography.titleMedium,
     },
     recordCard: {
-        marginBottom: 8,
+        marginBottom: brandTheme.shape.spacing,
+        overflow: 'hidden',
+        ...brandTheme.components.card,
+    },
+    cardGradient: {
+        borderRadius: brandTheme.shape.borderRadius,
     },
     recordHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8,
+        marginBottom: brandTheme.shape.spacing,
     },
     productInfo: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     productName: {
-        marginLeft: 8,
-        color: Colors.text.primary,
+        marginLeft: brandTheme.shape.spacing,
+        color: brandTheme.brandColors.text.primary,
+        ...brandTheme.typography.titleMedium,
     },
     duration: {
-        color: Colors.text.secondary,
+        color: brandTheme.brandColors.text.secondary,
+        ...brandTheme.typography.bodyMedium,
     },
     divider: {
-        marginVertical: 8,
+        backgroundColor: brandTheme.brandColors.divider,
+        marginVertical: brandTheme.shape.spacing,
     },
     timeInfo: {
-        marginTop: 8,
+        marginTop: brandTheme.shape.spacing,
+    },
+    timeText: {
+        color: brandTheme.brandColors.text.secondary,
+        marginBottom: brandTheme.shape.spacing / 2,
+        ...brandTheme.typography.bodyMedium,
     },
 });

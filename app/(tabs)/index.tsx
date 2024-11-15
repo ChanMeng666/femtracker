@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Card, Text, Portal, Dialog, Surface } from 'react-native-paper';
+import { Card, Text, Portal, Dialog, Surface } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useUsageRecords } from '@/hooks/useUsageRecords';
 import { ProductType, ProductNames, USAGE_HOURS } from '@/constants';
-import Colors from '../../constants/Colors';
+import { brandTheme } from '../theme';
+import { BrandButton } from '@/components/BrandButton';
 import {storageService} from "@/services/storage";
 
 export default function RecordScreen() {
@@ -15,7 +17,6 @@ export default function RecordScreen() {
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
 
-    // 格式化时间
     const formatTime = (milliseconds: number): string => {
         const hours = Math.floor(milliseconds / (1000 * 60 * 60));
         const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
@@ -23,7 +24,6 @@ export default function RecordScreen() {
         return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     };
 
-    // 更新计时器
     useEffect(() => {
         if (!activeProduct) {
             setElapsedTime('');
@@ -48,7 +48,6 @@ export default function RecordScreen() {
         return () => clearInterval(timer);
     }, [activeProduct]);
 
-    // 处理插入记录
     const handleInsert = async (type: ProductType) => {
         if (activeProduct) {
             setSelectedProduct(type);
@@ -58,104 +57,104 @@ export default function RecordScreen() {
         await addRecord(type);
     };
 
-    // 处理移除记录
     const handleRemove = async () => {
         if (activeProduct) {
+            // 获取所有记录
             const records = await storageService.getUsageRecords();
+            // 找到当前活跃的记录（没有removedAt的记录）
             const activeRecord = records.find(r => !r.removedAt);
             if (activeRecord) {
+                // 调用markRemoved更新记录
                 await markRemoved(activeRecord.id);
             }
         }
     };
 
     const getStatusColor = () => {
-        if (!activeProduct) return Colors.text.primary;
+        if (!activeProduct) return brandTheme.brandColors.text.primary;
         const now = Date.now();
         const elapsed = now - activeProduct.insertedAt;
         const { recommended, maximum } = USAGE_HOURS[activeProduct.productType];
 
         if (elapsed >= maximum * 60 * 60 * 1000) {
-            return Colors.status.error;
+            return brandTheme.brandColors.status.error;
         }
         if (elapsed >= recommended * 60 * 60 * 1000) {
-            return Colors.status.warning;
+            return brandTheme.brandColors.status.warning;
         }
-        return Colors.status.success;
+        return brandTheme.brandColors.status.success;
     };
 
     return (
         <View style={styles.container}>
             {activeProduct ? (
                 <Card style={styles.statusCard}>
-                    <Card.Content>
-                        <Surface style={[styles.statusBanner, { backgroundColor: getStatusColor() }]}>
-                            <Text variant="titleLarge" style={styles.statusTitle}>
-                                使用中
-                            </Text>
-                        </Surface>
+                    <LinearGradient
+                        colors={[brandTheme.brandColors.background.paper, brandTheme.brandColors.background.elevated]}
+                        style={styles.cardGradient}
+                    >
+                        <Card.Content>
+                            <Surface style={[styles.statusBanner, { backgroundColor: getStatusColor() }]}>
+                                <Text variant="titleLarge" style={styles.statusTitle}>
+                                    使用中
+                                </Text>
+                            </Surface>
 
-                        <View style={styles.productInfo}>
-                            <MaterialCommunityIcons
-                                name={activeProduct.productType === ProductType.TAMPON ? 'bandage' : 'cup'}
-                                size={32}
-                                color={Colors.primary.main}
+                            <View style={styles.productInfo}>
+                                <MaterialCommunityIcons
+                                    name={activeProduct.productType === ProductType.TAMPON ? 'bandage' : 'cup'}
+                                    size={32}
+                                    color={brandTheme.brandColors.primary.main}
+                                />
+                                <Text variant="headlineSmall" style={styles.productName}>
+                                    {ProductNames[activeProduct.productType]}
+                                </Text>
+                            </View>
+
+                            <View style={styles.timeInfo}>
+                                <Text variant="titleMedium" style={styles.timeLabel}>已使用时间</Text>
+                                <Text variant="headlineMedium" style={[styles.timeValue, { color: getStatusColor() }]}>
+                                    {elapsedTime}
+                                </Text>
+
+                                <Text variant="titleMedium" style={styles.timeLabel}>建议更换时间还剩</Text>
+                                <Text variant="headlineMedium" style={styles.timeValue}>
+                                    {timeUntilRecommended}
+                                </Text>
+
+                                <Text variant="titleMedium" style={styles.timeLabel}>最长使用时限还剩</Text>
+                                <Text variant="headlineMedium" style={[
+                                    styles.timeValue,
+                                    { color: timeUntilMaximum.includes('超过') ? brandTheme.brandColors.status.error : brandTheme.brandColors.text.primary }
+                                ]}>
+                                    {timeUntilMaximum}
+                                </Text>
+                            </View>
+
+                            <BrandButton
+                                title="记录取出"
+                                onPress={handleRemove}
+                                mode="secondary"
+                                style={styles.removeButton}
                             />
-                            <Text variant="headlineSmall" style={styles.productName}>
-                                {ProductNames[activeProduct.productType]}
-                            </Text>
-                        </View>
-
-                        <View style={styles.timeInfo}>
-                            <Text variant="titleMedium" style={styles.timeLabel}>已使用时间</Text>
-                            <Text variant="headlineMedium" style={[styles.timeValue, { color: getStatusColor() }]}>
-                                {elapsedTime}
-                            </Text>
-
-                            <Text variant="titleMedium" style={styles.timeLabel}>建议更换时间还剩</Text>
-                            <Text variant="headlineMedium" style={styles.timeValue}>
-                                {timeUntilRecommended}
-                            </Text>
-
-                            <Text variant="titleMedium" style={styles.timeLabel}>最长使用时限还剩</Text>
-                            <Text variant="headlineMedium" style={[
-                                styles.timeValue,
-                                { color: timeUntilMaximum.includes('超过') ? Colors.status.error : Colors.text.primary }
-                            ]}>
-                                {timeUntilMaximum}
-                            </Text>
-                        </View>
-
-                        <Button
-                            mode="contained"
-                            onPress={handleRemove}
-                            style={styles.removeButton}
-                        >
-                            记录取出
-                        </Button>
-                    </Card.Content>
+                        </Card.Content>
+                    </LinearGradient>
                 </Card>
             ) : (
                 <View style={styles.buttonContainer}>
-                    <Text variant="headlineMedium" style={styles.title}>
+                    <Text variant="displayLarge" style={styles.title}>
                         记录使用
                     </Text>
-                    <Button
-                        mode="contained"
+                    <BrandButton
+                        title="放入卫生棉条"
                         onPress={() => handleInsert(ProductType.TAMPON)}
                         style={styles.insertButton}
-                        contentStyle={styles.buttonContent}
-                    >
-                        放入卫生棉条
-                    </Button>
-                    <Button
-                        mode="contained"
+                    />
+                    <BrandButton
+                        title="放入月经杯"
                         onPress={() => handleInsert(ProductType.CUP)}
                         style={styles.insertButton}
-                        contentStyle={styles.buttonContent}
-                    >
-                        放入月经杯
-                    </Button>
+                    />
                 </View>
             )}
 
@@ -163,6 +162,7 @@ export default function RecordScreen() {
                 <Dialog
                     visible={showConfirmDialog}
                     onDismiss={() => setShowConfirmDialog(false)}
+                    style={styles.dialog}
                 >
                     <Dialog.Title>确认更换</Dialog.Title>
                     <Dialog.Content>
@@ -171,8 +171,13 @@ export default function RecordScreen() {
                         </Text>
                     </Dialog.Content>
                     <Dialog.Actions>
-                        <Button onPress={() => setShowConfirmDialog(false)}>取消</Button>
-                        <Button
+                        <BrandButton
+                            title="取消"
+                            onPress={() => setShowConfirmDialog(false)}
+                            mode="secondary"
+                        />
+                        <BrandButton
+                            title="确认"
                             onPress={async () => {
                                 setShowConfirmDialog(false);
                                 if (selectedProduct) {
@@ -181,9 +186,7 @@ export default function RecordScreen() {
                                     setSelectedProduct(null);
                                 }
                             }}
-                        >
-                            确认
-                        </Button>
+                        />
                     </Dialog.Actions>
                 </Dialog>
             </Portal>
@@ -193,63 +196,64 @@ export default function RecordScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: Colors.background.default,
+        ...brandTheme.globalStyles.container,
     },
     title: {
         textAlign: 'center',
-        marginBottom: 32,
-        color: Colors.text.primary,
+        marginBottom: brandTheme.shape.spacing * 4,
+        color: brandTheme.brandColors.text.primary,
     },
     buttonContainer: {
         flex: 1,
         justifyContent: 'center',
     },
     insertButton: {
-        marginVertical: 8,
-        height: 56,
-    },
-    buttonContent: {
-        height: 56,
+        marginVertical: brandTheme.shape.spacing,
     },
     statusCard: {
-        marginTop: 16,
+        marginTop: brandTheme.shape.spacing * 2,
+        overflow: 'hidden',
+    },
+    cardGradient: {
+        borderRadius: brandTheme.shape.borderRadius,
     },
     statusBanner: {
-        padding: 8,
-        marginBottom: 16,
-        borderRadius: 8,
+        padding: brandTheme.shape.spacing,
+        marginBottom: brandTheme.shape.spacing * 2,
+        borderRadius: brandTheme.shape.borderRadius,
     },
     statusTitle: {
         textAlign: 'center',
-        color: Colors.background.default,
+        color: brandTheme.brandColors.background.default,
         fontWeight: 'bold',
     },
     productInfo: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 24,
+        marginBottom: brandTheme.shape.spacing * 3,
     },
     productName: {
-        marginLeft: 8,
-        color: Colors.text.primary,
+        marginLeft: brandTheme.shape.spacing,
+        color: brandTheme.brandColors.text.primary,
         fontWeight: 'bold',
     },
     timeInfo: {
-        marginBottom: 24,
+        marginBottom: brandTheme.shape.spacing * 3,
     },
     timeLabel: {
-        color: Colors.text.secondary,
-        marginBottom: 4,
+        color: brandTheme.brandColors.text.secondary,
+        marginBottom: brandTheme.shape.spacing / 2,
     },
     timeValue: {
         textAlign: 'center',
-        marginBottom: 16,
+        marginBottom: brandTheme.shape.spacing * 2,
         fontVariant: ['tabular-nums'],
     },
     removeButton: {
-        marginTop: 8,
+        marginTop: brandTheme.shape.spacing,
+    },
+    dialog: {
+        backgroundColor: brandTheme.brandColors.background.paper,
     },
 });
