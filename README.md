@@ -1,8 +1,8 @@
 # FemTracker
 
-FemTracker is a modern mobile application designed to help users track and manage their menstrual product usage safely. Built with React Native and Expo, it provides real-time duration tracking, smart notifications, and usage history for better period care practices.
+<img src="./assets/images/icon-192.png" alt="FemTracker Logo" align="right" />
 
-![App Screenshot](./assets/images/icon-192.png)
+FemTracker is a modern mobile application designed to help users track and manage their menstrual product usage safely. Built with React Native and Expo, it provides real-time duration tracking, smart notifications, and usage history for better period care practices.
 
 ## Features
 
