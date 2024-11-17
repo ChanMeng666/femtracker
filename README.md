@@ -1,50 +1,111 @@
-# Welcome to your Expo app 👋
+# FemTracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+FemTracker is a modern mobile application designed to help users track and manage their menstrual product usage safely. Built with React Native and Expo, it provides real-time duration tracking, smart notifications, and usage history for better period care practices.
 
-## Get started
+![App Screenshot](./assets/images/icon-192.png)
 
-1. Install dependencies
+## Features
 
+- **Real-time Usage Tracking**: Monitor the duration of tampon and menstrual cup usage
+- **Smart Reminders**: Receive notifications for recommended and maximum usage times
+- **Usage History**: View and track your product usage patterns over time
+- **Clean UI**: Modern, intuitive interface with clear status indicators
+- **Safety First**: Built-in timers and warnings to prevent extended use
+- **Offline Support**: All data stored locally on your device
+
+## Tech Stack
+
+- React Native
+- Expo
+- TypeScript
+- React Native Paper
+- AsyncStorage
+- Expo Notifications
+- Linear Gradient
+- Lottie Animations
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or later)
+- npm or yarn
+- Expo CLI
+- iOS Simulator (for iOS development)
+- Android Studio and Android SDK (for Android development)
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/ChanMeng666/FemTracker.git
+   cd FemTracker
+   ```
+
+2. Install dependencies
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
-2. Start the app
-
+3. Start the development server
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. Run on your preferred platform
+   - Press `i` for iOS simulator
+   - Press `a` for Android emulator
+   - Scan QR code with Expo Go app for physical device
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+FemTracker/
+├── app/                   # Main application screens
+├── assets/               # Images, fonts, and other static files
+├── components/           # Reusable UI components
+├── constants/            # App constants and configurations
+├── hooks/               # Custom React hooks
+├── services/            # Core services (storage, notifications)
+├── src/                 # Source files
+│   └── theme/           # UI theme and styling
+└── types/               # TypeScript type definitions
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Architecture
 
-## Learn more
+The app follows a clean architecture pattern with:
+- Hooks for business logic and state management
+- Services for core functionalities
+- Local storage for data persistence
+- Theme-based styling system
+- Type-safe development with TypeScript
 
-To learn more about developing your project with Expo, look at the following resources:
+## Contributing
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
-## Join the community
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Join our community of developers creating universal apps.
+## License
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Expo](https://expo.dev/) for the amazing development platform
+- [React Native Paper](https://callstack.github.io/react-native-paper/) for the Material Design components
+- All contributors who have helped shape this project
+
+## Author
+
+**Chan Meng**
+
+- LinkedIn: [chanmeng666](https://www.linkedin.com/in/chanmeng666/)
+- GitHub: [ChanMeng666](https://github.com/ChanMeng666)
