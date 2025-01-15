@@ -16,7 +16,7 @@ FemTracker is a modern mobile application designed to help users track and manag
 
 <br/>
 
-[![Explore GitHub Profile README Generator](https://gradient-svg-generator.vercel.app/?text=👉+Try+It+Now!+👈&height=40&template=pride-rainbow)](https://github.com/ChanMeng666/femtracker/releases/tag/version1.0.0)
+[![👉Try It Now!👈](https://gradient-svg-generator.vercel.app/api/svg?text=%F0%9F%91%89Try%20It%20Now!%F0%9F%91%88&color=000000&height=60&gradientType=radial&duration=6s&color0=ffffff&template=pride-rainbow)](https://github.com/ChanMeng666/femtracker/releases/tag/version1.0.0)
 
 <br/>
 
