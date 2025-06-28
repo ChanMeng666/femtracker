@@ -867,7 +867,7 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 [github-contributors-link]: https://github.com/ChanMeng666/femtracker/contributors
 [github-release-link]: https://github.com/ChanMeng666/femtracker/releases
 [pr-welcome-link]: https://github.com/ChanMeng666/femtracker/pulls
-[github-license-link]: https://github.com/ChanMeng666/femtracker/blob/main/LICENSE
+[github-license-link]: https://github.com/ChanMeng666/femtracker/blob/master/LICENSE
 
 <!-- External Links -->
 [expo-link]: https://expo.dev/
